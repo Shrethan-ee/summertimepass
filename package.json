@@ -1,0 +1,33 @@
+{
+  "name": "home",
+  "version": "1.0.0",
+  "description": "A comprehensive backend API for a startup idea-sharing platform with user roles, authentication, and interactive features like likes and comments.",
+  "main": "create_test_data.js",
+  "scripts": {
+    "start": "node create_test_data.js",
+    "dev": "nodemon create_test_data.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "startup",
+    "idea-sharing",
+    "backend",
+    "API",
+    "authentication"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
