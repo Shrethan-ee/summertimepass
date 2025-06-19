@@ -13,11 +13,16 @@ import {
   Tooltip,
   MenuItem,
   Badge,
+  InputBase,
+  Fade,
+  Paper,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MessageIcon from '@mui/icons-material/Message';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import SearchIcon from '@mui/icons-material/Search';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
 const pages = [
   { title: 'Ideas', path: '/ideas' },

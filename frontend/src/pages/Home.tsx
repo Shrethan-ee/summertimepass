@@ -21,6 +21,45 @@ import DiamondIcon from '@mui/icons-material/Diamond';
 
 const Home = () => {
   const navigate = useNavigate();
+  const [animatedStats, setAnimatedStats] = useState({
+    ideas: 0,
+    entrepreneurs: 0,
+    investors: 0,
+    funding: 0
+  });
+
+  useEffect(() => {
+    const targetStats = {
+      ideas: 1247,
+      entrepreneurs: 3856,
+      investors: 429,
+      funding: 12.4
+    };
+
+    const duration = 2000;
+    const steps = 60;
+    const stepTime = duration / steps;
+
+    let currentStep = 0;
+    const timer = setInterval(() => {
+      currentStep++;
+      const progress = currentStep / steps;
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+
+      setAnimatedStats({
+        ideas: Math.floor(targetStats.ideas * easeOut),
+        entrepreneurs: Math.floor(targetStats.entrepreneurs * easeOut),
+        investors: Math.floor(targetStats.investors * easeOut),
+        funding: (targetStats.funding * easeOut).toFixed(1)
+      });
+
+      if (currentStep >= steps) {
+        clearInterval(timer);
+      }
+    }, stepTime);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const featuredIdeas = [
     {
@@ -47,6 +86,13 @@ const Home = () => {
       likes: 167,
       comments: 38,
     },
+  ];
+
+  const platformStats = [
+    { label: 'Ideas Shared', value: animatedStats.ideas, suffix: '+' },
+    { label: 'Entrepreneurs', value: animatedStats.entrepreneurs, suffix: '+' },
+    { label: 'Active Investors', value: animatedStats.investors, suffix: '+' },
+    { label: 'Funding Raised', value: animatedStats.funding, suffix: 'M+', prefix: '$' }
   ];
 
   return (
