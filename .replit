@@ -8,12 +8,25 @@ channel = "stable-24_05"
 run = ["sh", "-c", "npm run dev"]
 
 [workflows]
-runButton = "Development Server"
+runButton = "Start Full Application"
 
 [[workflows.workflow]]
 name = "Development Server"
 author = 43877718
 mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && npm start"
+
+[[workflows.workflow]]
+name = "Start Full Application"
+author = 43877718
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server.js"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"

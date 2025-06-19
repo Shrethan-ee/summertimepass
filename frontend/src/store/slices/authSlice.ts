@@ -32,7 +32,7 @@ export const login = createAsyncThunk(
   'auth/login',
   async (credentials: { username: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, credentials);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/api/token/obtain`, credentials);
       localStorage.setItem('token', response.data.token);
       return response.data;
     } catch (error: any) {
@@ -52,7 +52,7 @@ export const register = createAsyncThunk(
     role: string;
   }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, userData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/api/register`, userData);
       localStorage.setItem('token', response.data.token);
       return response.data;
     } catch (error: any) {
@@ -74,7 +74,7 @@ export const getCurrentUser = createAsyncThunk(
         throw new Error('No token found');
       }
 
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/me`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/api/users/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
