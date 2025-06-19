@@ -210,48 +210,28 @@ const Navbar = () => {
 
           {/* Desktop menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, ml: 4 }}>
-            {pages.map((page) => (
-              <Button
-                key={page.title}
-                component={RouterLink}
-                to={page.path}
-                onClick={handleCloseNavMenu}
-                sx={{ 
-                  my: 2, 
-                  mx: 1,
-                  color: '#f8fafc', 
-                  display: 'block',
-                  fontWeight: 500,
-                  fontSize: '1rem',
-                  textTransform: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  transition: 'all 0.3s ease',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  '&:hover': {
-                    background: 'rgba(99, 102, 241, 0.2)',
-                    transform: 'translateY(-2px)',
-                    color: 'white',
-                  },
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    width: '0%',
-                    height: '2px',
-                    background: 'linear-gradient(135deg, #6366f1, #a855f7)',
-                    transition: 'width 0.3s ease',
-                  },
-                  '&:hover::before': {
-                    width: '100%',
-                  }
-                }}
-              >
-                {page.title}
-              </Button>
-            ))}
+            
+              <Button 
+              color="inherit" 
+              onClick={() => navigate('/ideas')}
+              sx={{ mr: 2 }}
+            >
+              Ideas
+            </Button>
+            <Button 
+              color="inherit" 
+              onClick={() => navigate('/dashboard')}
+              sx={{ mr: 2 }}
+            >
+              Dashboard
+            </Button>
+            <Button 
+              color="inherit" 
+              onClick={() => navigate('/community')}
+              sx={{ mr: 2 }}
+            >
+              Community
+            </Button>
           </Box>
 
           {/* User menu */}
@@ -279,7 +259,7 @@ const Navbar = () => {
                 </Badge>
               </IconButton>
             </Tooltip>
-            
+
             <Tooltip title="Messages">
               <IconButton
                 size="large"
@@ -332,7 +312,7 @@ const Navbar = () => {
                 </Avatar>
               </IconButton>
             </Tooltip>
-            
+
             <Menu
               sx={{ 
                 mt: '45px',
@@ -406,4 +386,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

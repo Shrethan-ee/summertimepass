@@ -24,6 +24,7 @@ import Profile from './pages/Profile';
 import Messages from './pages/Messages';
 import Notifications from './pages/Notifications';
 import NotFound from './pages/NotFound';
+import Community from './pages/Community';
 
 // Create theme
 const theme = createTheme({
@@ -128,7 +129,14 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-
+              <Route
+                path="/community"
+                element={<Community />}
+              />
+              <Route
+                path="/groups/:id"
+                element={<Community />}
+              />
               {/* 404 Route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
@@ -140,4 +148,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App; 
+export default App;

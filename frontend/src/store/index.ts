@@ -4,6 +4,7 @@ import ideasReducer from './slices/ideasSlice';
 import messagesReducer from './slices/messagesSlice';
 import notificationsReducer from './slices/notificationsSlice';
 import usersReducer from './slices/usersSlice';
+import groupsReducer from './slices/groupsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     messages: messagesReducer,
     notifications: notificationsReducer,
     users: usersReducer,
+    groups: groupsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -20,4 +22,4 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch; 
+export type AppDispatch = typeof store.dispatch;

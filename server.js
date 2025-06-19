@@ -11,14 +11,18 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
 
-// Import Sequelize models
-const sequelize = require("./config/database");
-const User = require("./models/User");
-const Category = require("./models/Category");
-const Tag = require("./models/Tag");
-const Idea = require("./models/Idea");
-const Like = require("./models/Like");
-const Comment = require("./models/Comment");
+// Import routes
+const authRoutes = require('./users/serializers');
+const User = require('./models/User');
+const Category = require('./models/Category');
+const Tag = require('./models/Tag');
+const Idea = require('./models/Idea');
+const Like = require('./models/Like');
+const Comment = require('./models/Comment');
+const Message = require('./models/Message');
+const Notification = require('./models/Notification');
+const Group = require('./models/Group');
+const GroupMembership = require('./models/GroupMembership');
 
 // Import conceptual modules (serializers and feed functions)
 const { UserSerializer, UserRegistrationSerializer, CustomTokenObtainPairSerializer, UserUpdateSerializer } = require("./users/serializers");
@@ -431,6 +435,66 @@ app.post("/api/ideas/:idea_id/comments/:comment_id/reply", isAuthenticated, asyn
         res.status(400).json({ detail: JSON.parse(error.message) });
     }
 });
+
+// Define model associations
+User.hasMany(Idea, { foreignKey: 'userId', as: 'ideas' });
+User.hasMany(Like, { foreignKey: 'userId', as: 'likes' });
+User.hasMany(Comment, { foreignKey: 'userId', as: 'comments' });
+User.hasMany(Message, { foreignKey: 'senderId', as: 'sentMessages' });
+User.hasMany(Message, { foreignKey: 'receiverId', as: 'receivedMessages' });
+User.hasMany(Notification, { foreignKey: 'userId', as: 'notifications' });
+User.hasMany(Group, { foreignKey: 'creator_id', as: 'createdGroups' });
+User.hasMany(GroupMembership, { foreignKey: 'user_id', as: 'groupMemberships' });
+
+Idea.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Idea.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
+Idea.belongsToMany(Tag, { through: 'IdeaTags', foreignKey: 'ideaId' });
+Idea.hasMany(Like, { foreignKey: 'ideaId', as: 'likes' });
+Idea.hasMany(Comment, { foreignKey: 'ideaId', as: 'comments' });
+
+Category.hasMany(Idea, { foreignKey: 'categoryId', as: 'ideas' });
+
+Tag.belongsToMany(Idea, { through: 'IdeaTags', foreignKey: 'tagId' });
+
+Like.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Like.belongsTo(Idea, { foreignKey: 'ideaId', as: 'idea' });
+
+Comment.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Comment.belongsTo(Idea, { foreignKey: 'ideaId', as: 'idea' });
+Comment.belongsTo(Comment, { foreignKey: 'parentId', as: 'parent' });
+Comment.hasMany(Comment, { foreignKey: 'parentId', as: 'replies' });
+
+Message.belongsTo(User, { foreignKey: 'senderId', as: 'sender' });
+Message.belongsTo(User, { foreignKey: 'receiverId', as: 'receiver' });
+
+Notification.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+Group.belongsTo(User, { foreignKey: 'creator_id', as: 'creator' });
+Group.hasMany(GroupMembership, { foreignKey: 'group_id', as: 'memberships' });
+
+GroupMembership.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+GroupMembership.belongsTo(Group, { foreignKey: 'group_id', as: 'group' });
+
+// Import API views
+const { categoryController, tagController, ideaController, isAuthenticated, isEntrepreneurOrReadOnly, isOwnerOrReadOnly, isAdminUser } = require('./api/views');
+const { likeController } = require('./api/like_views');
+const { commentController } = require('./api/comment_views');
+const { groupController } = require('./api/group_views');
+
+// Comment routes
+app.get('/api/ideas/:id/comments', commentController.getComments);
+app.post('/api/ideas/:id/comments', isAuthenticated, commentController.createComment);
+app.put('/api/comments/:id', isAuthenticated, commentController.updateComment);
+app.delete('/api/comments/:id', isAuthenticated, commentController.deleteComment);
+
+// Group routes
+app.get('/api/groups', groupController.listGroups);
+app.get('/api/groups/:id', groupController.getGroup);
+app.post('/api/groups', isAuthenticated, groupController.createGroup);
+app.post('/api/groups/:id/join', isAuthenticated, groupController.joinGroup);
+app.delete('/api/groups/:id/leave', isAuthenticated, groupController.leaveGroup);
+app.get('/api/groups/:id/members', groupController.getGroupMembers);
+app.get('/api/user/groups', isAuthenticated, groupController.getUserGroups);
 
 // Sync database and start server
 sequelize.sync({ force: false }).then(() => {
